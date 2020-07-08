@@ -2,8 +2,19 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import logo from './assets/logo.png'
+import * as ImagePicker from 'expo-image-picker'
 
 export default function App() {
+  let openImagePickerAsync = async () => {
+    let permissionResult = await ImagePicker.requestCameraPermissionsAsync();
+
+    if (permissionResult.granted == false) {
+      alert("Permission is required to access your camera roll");
+      return;
+    }
+    let pickerResult = await ImagePicker.launchImageLibraryAsync();
+    console.log(pickerResult);
+  }
   return (
     <View style={styles.container}>
       <Image source={{uri: "https://i.imgur.com/TkIrScD.png" }} style={styles.logo}></Image>
@@ -11,9 +22,11 @@ export default function App() {
         To share a photo with a friend, click the button below.
       </Text>
       <TouchableOpacity
-        onPress={() => alert('Hello there')}
+        onPress={openImagePickerAsync}
         style={ styles.button }>
-        <Text style={ styles.buttonText }>Pick a photo</Text>
+        <Text style={ styles.buttonText }>
+          Pick a photo
+        </Text>
 
       </TouchableOpacity>
 
